@@ -1,6 +1,5 @@
 <html>
     <head>
-	    <!-- Loading in TensorFlow.js version 0.11.2 -->
 	    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.2"> </script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"> </script>
     </head>
@@ -15,38 +14,36 @@
 	    </div>
 
 	    <script>
-	        var xs = [] // starts empty, to be populated with .push
-	        var ys = [] // starts empty, to be populated with .push
-	        var bestfit = [] // to be populated by tf.js
+	        var xs = [] 
+	        var ys = [] 
+	        var bestfit = [] 
 
-	        document.getElementById('x').value = 1; // create a starting value for our x
+	        document.getElementById('x').value = 1; 
 
-	        // the append id is given to our submit button, this will be called
 	        document.getElementById("append").onclick = function(){
 
-		        //Create the model
+		        //Creating the model
 		        const model = tf.sequential();
-		        model.add(tf.layers.dense({units: 128, inputShape: [1]})); // layer 1
-		        model.add(tf.layers.dense({units: 128, inputShape: [128]}, activation = "sigmoid")); // layer 2
-		        model.add(tf.layers.dense({units: 1, inputShape: [128]})); // output layer
+		        model.add(tf.layers.dense({units: 128, inputShape: [1]})); 
+		        model.add(tf.layers.dense({units: 128, inputShape: [128]}, activation = "sigmoid")); 
+		        model.add(tf.layers.dense({units: 1, inputShape: [128]})); 
 		        
 		        const trainingRate = 0.01;
 		        const optimizer = tf.train.adam(trainingRate);
 
-		        model.compile({loss: 'meanSquaredError', optimizer: optimizer}); // compile with params
+		        model.compile({loss: 'meanSquaredError', optimizer: optimizer}); 
 
-	            var x = document.getElementById("x").value; // grab the current value for x
-	            var y = document.getElementById("y").value; // grab the current value for y
-	            xs.push(x) // append that value to the xs
-	            ys.push(y) // append that value to the ys
-	            document.getElementById('x').value = parseInt(x)+1; // add 1 to the x automatically
+	            var x = document.getElementById("x").value; 
+	            var y = document.getElementById("y").value; 
+	            xs.push(x) 
+	            ys.push(y) 
+	            document.getElementById('x').value = parseInt(x)+1; 
 
-	            // Train the model...then:
 	            model.fit(tf.tensor(xs), tf.tensor(ys), {epochs:200}).then(() => {
 
-	                bestfit = model.predict(tf.tensor(xs, [xs.length, 1])).dataSync(); // create best-fit line from xs data
-	                var ctx = document.getElementById("myChart").getContext('2d'); // begin chart
-	                // Chart data and settings:
+	                bestfit = model.predict(tf.tensor(xs, [xs.length, 1])).dataSync(); 
+	                var ctx = document.getElementById("myChart").getContext('2d'); 
+	              
 	                var myChart = new Chart(ctx, {
 	                    type: 'line',
 	                    options: {scales:{yAxes: [{ticks: {beginAtZero: true}}]}},
